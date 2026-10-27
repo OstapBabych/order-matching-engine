@@ -56,4 +56,32 @@ public class Order {
     public long getTimestamp() {
         return timestamp;
     }
+
+    public void fill(long quantity) {
+        if (isFilled()) {
+            throw new IllegalStateException("order id: " + id + " - is filled");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("quantity must be positive, got: " + quantity);
+        }
+        if (remainingQuantity < quantity) {
+            throw new IllegalArgumentException("fill quantity " + quantity + " exceeds remaining " + remainingQuantity + " for order id: " + id);
+        }
+        this.remainingQuantity -= quantity;
+    }
+
+    public boolean isFilled() {
+        return remainingQuantity == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", side=" + side +
+                ", price=" + price +
+                ", quantity=" + remainingQuantity + "/" + originalQuantity +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

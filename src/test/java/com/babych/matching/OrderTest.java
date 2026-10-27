@@ -73,9 +73,65 @@ class OrderTest {
     void rejectsNegativeQuantity() {
         assertThrows(IllegalArgumentException.class, () -> new Order(1, Side.BUY, 1, -1, 1000));
     }
-    
+
     @Test
     void rejectsNullSide() {
         assertThrows(NullPointerException.class, () -> new Order(1, null, 10, 100, 1000));
+    }
+
+
+    @Test
+    void partialFillReducesRemainingQuantity() {
+        order.fill(30);
+
+        assertEquals(70, order.getRemainingQuantity());
+        assertFalse(order.isFilled());
+    }
+
+    @Test
+    void fullFillMarksOrderAsFilled() {
+        order.fill(100);
+
+        assertEquals(0, order.getRemainingQuantity());
+        assertTrue(order.isFilled());
+    }
+
+    @Test
+    void multiplePartialFillsCompleteOrder() {
+        order.fill(30);
+        order.fill(70);
+
+        assertEquals(0, order.getRemainingQuantity());
+        assertTrue(order.isFilled());
+    }
+
+    @Test
+    void rejectsZeroFill() {
+        assertThrows(IllegalArgumentException.class, () -> order.fill(0));
+    }
+
+    @Test
+    void rejectsNegativeFill() {
+        assertThrows(IllegalArgumentException.class, () -> order.fill(-5));
+    }
+
+    @Test
+    void rejectsOverfillAndKeepsRemainingQuantity() {
+        assertThrows(IllegalArgumentException.class, () -> order.fill(110));
+        assertEquals(100, order.getRemainingQuantity());
+    }
+
+    @Test
+    void rejectsFillOnFilledOrder() {
+        order.fill(100);
+
+        assertThrows(IllegalStateException.class, () -> order.fill(30));
+    }
+
+    @Test
+    void fillDoesNotChangeOriginalQuantity() {
+        order.fill(30);
+
+        assertEquals(100, order.getOriginalQuantity());
     }
 }
