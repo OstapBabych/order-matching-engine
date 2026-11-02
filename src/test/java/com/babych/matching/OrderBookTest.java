@@ -3,6 +3,7 @@ package com.babych.matching;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.OptionalLong;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -157,5 +158,76 @@ class OrderBookTest {
 
         assertEquals(List.of(new Trade(3, 1, 100, 30), new Trade(3, 2, 101, 20)), trades);
         assertEquals(OptionalLong.of(101), orderBook.bestAsk());
+    }
+
+    @Test
+    void cancelRemovesOrderFromBook() {
+        orderBook.add(new Order(1, Side.BUY, 100, 50, 1000));
+
+        assertTrue(orderBook.cancel(1));
+        assertTrue(orderBook.isEmpty());
+    }
+
+    @Test
+    void cancelUnknownIdReturnsFalse() {
+        assertFalse(orderBook.cancel(1));
+    }
+
+    @Test
+    void cancelTwiceReturnsFalseSecondTime() {
+        orderBook.add(new Order(1, Side.BUY, 100, 50, 1000));
+
+        assertTrue(orderBook.cancel(1));
+        assertFalse(orderBook.cancel(1));
+    }
+
+    @Test
+    void cancelKeepsOtherOrdersAtSameLevel() {
+        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.add(new Order(2, Side.SELL, 100, 50, 1001));
+
+        assertTrue(orderBook.cancel(1));
+
+        List<Trade> trades = orderBook.submit(new Order(3, Side.BUY, 100, 50, 1002));
+
+        assertEquals(List.of(new Trade(3, 2, 100, 50)), trades);
+    }
+
+    @Test
+    void cancelledOrderIsNotMatched() {
+        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+
+        assertTrue(orderBook.cancel(1));
+
+        List<Trade> trades = orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
+
+        assertTrue(trades.isEmpty());
+        assertEquals(OptionalLong.of(100), orderBook.bestBid());
+    }
+
+    @Test
+    void filledOrderCannotBeCancelled() {
+        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+
+        orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
+
+        assertFalse(orderBook.cancel(1));
+    }
+
+    @Test
+    void partiallyFilledIncomingCanBeCancelled() {
+        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+
+        orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
+
+        assertTrue(orderBook.cancel(2));
+        assertTrue(orderBook.isEmpty());
+    }
+
+    @Test
+    void rejectsDuplicateOrderId() {
+        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+
+        assertThrows(IllegalArgumentException.class, () -> orderBook.add(new Order(1, Side.SELL, 100, 30, 1000)));
     }
 }

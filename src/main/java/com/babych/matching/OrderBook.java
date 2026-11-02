@@ -5,17 +5,24 @@ import java.util.*;
 public class OrderBook {
     private final TreeMap<Long, ArrayDeque<Order>> bids;
     private final TreeMap<Long, ArrayDeque<Order>> asks;
+    private final HashMap<Long, Order> orders;
 
     public OrderBook() {
         this.bids = new TreeMap<>(Comparator.reverseOrder());
         this.asks = new TreeMap<>();
+        this.orders = new HashMap<>();
     }
 
     public void add(Order order) {
         Objects.requireNonNull(order, "order must not be null");
+        if (orders.containsKey(order.getId())) {
+            throw new IllegalArgumentException("order with id: " + order.getId() + " already exists");
+        }
 
         TreeMap<Long, ArrayDeque<Order>> bookSide = levelsFor(order.getSide());
         bookSide.computeIfAbsent(order.getPrice(), k -> new ArrayDeque<>()).add(order);
+
+        orders.put(order.getId(), order);
     }
 
     public OptionalLong bestBid() {
@@ -58,6 +65,7 @@ public class OrderBook {
 
             if (resting.isFilled()) {
                 queue.pollFirst();
+                orders.remove(resting.getId());
             }
             if (queue.isEmpty()) {
                 opposite.pollFirstEntry();
@@ -70,6 +78,26 @@ public class OrderBook {
         }
 
         return trades;
+    }
+
+    public boolean cancel(long orderId) {
+        Order order = orders.get(orderId);
+
+        if (order == null) {
+            return false;
+        }
+
+        TreeMap<Long, ArrayDeque<Order>> levels = levelsFor(order.getSide());
+        ArrayDeque<Order> queue = levels.get(order.getPrice());
+        queue.remove(order);
+
+        if (queue.isEmpty()) {
+            levels.remove(order.getPrice());
+        }
+
+        orders.remove(orderId);
+
+        return true;
     }
 
     private TreeMap<Long, ArrayDeque<Order>> levelsFor(Side side) {
