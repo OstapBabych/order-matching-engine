@@ -134,4 +134,29 @@ class OrderTest {
 
         assertEquals(100, order.getOriginalQuantity());
     }
+
+    @Test
+    void validMarketOrder() {
+        Order order1 = Order.market(1, Side.SELL, 10, 1000);
+
+        assertEquals(0, order1.getPrice());
+        assertEquals(OrderType.MARKET, order1.getOrderType());
+    }
+
+    @Test
+    void validLimitOrder() {
+        Order order = new Order(1, Side.SELL, 10, 100, 1000);
+
+        assertEquals(OrderType.LIMIT, order.getOrderType());
+    }
+
+    @Test
+    void rejectsZeroQuantityMarketOrder() {
+        assertThrows(IllegalArgumentException.class, () -> Order.market(1, Side.SELL, 0, 1000));
+    }
+
+    @Test
+    void rejectsNegativeQuantityMarketOrder() {
+        assertThrows(IllegalArgumentException.class, () -> Order.market(1, Side.SELL, -10, 1000));
+    }
 }

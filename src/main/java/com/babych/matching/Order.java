@@ -10,17 +10,31 @@ public class Order {
     private final long originalQuantity;
     private long remainingQuantity;
     private final long timestamp;
+    private final OrderType orderType;
 
     public Order(long id, Side side, long price, long quantity, long timestamp) {
+        this(id, side, OrderType.LIMIT, price, quantity, timestamp);
+    }
+
+    private Order(long id, Side side, OrderType orderType, long price, long quantity, long timestamp) {
         if (id <= 0) {
             throw new IllegalArgumentException("id must be positive, got: " + id);
         }
         this.id = id;
         this.side = Objects.requireNonNull(side, "side must not be null");
 
-        if (price <= 0) {
-            throw new IllegalArgumentException("price must be positive, got: " + price);
+        this.orderType = Objects.requireNonNull(orderType, "order type must not be null");
+
+        if (orderType == OrderType.LIMIT) {
+            if (price <= 0) {
+                throw new IllegalArgumentException("price must be positive, got: " + price);
+            }
+        } else {
+            if (price != 0) {
+                throw new IllegalArgumentException("market order must have price 0, got: " + price);
+            }
         }
+
         this.price = price;
 
         if (quantity <= 0) {
@@ -32,13 +46,16 @@ public class Order {
         this.timestamp = timestamp;
     }
 
-
     public long getId() {
         return id;
     }
 
     public Side getSide() {
         return side;
+    }
+
+    public OrderType getOrderType() {
+        return orderType;
     }
 
     public long getPrice() {
@@ -74,11 +91,16 @@ public class Order {
         return remainingQuantity == 0;
     }
 
+    public static Order market(long id, Side side, long quantity, long timestamp) {
+        return new Order(id, side, OrderType.MARKET, 0, quantity, timestamp);
+    }
+
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", side=" + side +
+                ", type=" + orderType +
                 ", price=" + price +
                 ", quantity=" + remainingQuantity + "/" + originalQuantity +
                 ", timestamp=" + timestamp +
