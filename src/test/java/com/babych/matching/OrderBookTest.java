@@ -30,40 +30,40 @@ class OrderBookTest {
 
     @Test
     void addingBuyOrderSetsBestBid() {
-        orderBook.add(order11);
+        orderBook.submit(order11);
 
         assertEquals(OptionalLong.of(10), orderBook.bestBid());
     }
 
     @Test
     void addingSellOrderSetsBestAsk() {
-        orderBook.add(order21);
+        orderBook.submit(order21);
 
         assertEquals(OptionalLong.of(10), orderBook.bestAsk());
     }
 
     @Test
     void bestBidIsHighestBuyPrice() {
-        orderBook.add(order11);
-        orderBook.add(order12);
-        orderBook.add(order13);
+        orderBook.submit(order11);
+        orderBook.submit(order12);
+        orderBook.submit(order13);
 
         assertEquals(OptionalLong.of(15), orderBook.bestBid());
     }
 
     @Test
     void bestAskIsLowestSellPrice() {
-        orderBook.add(order21);
-        orderBook.add(order22);
-        orderBook.add(order23);
+        orderBook.submit(order21);
+        orderBook.submit(order22);
+        orderBook.submit(order23);
 
         assertEquals(OptionalLong.of(5), orderBook.bestAsk());
     }
 
     @Test
     void buyAndSellAreStoredSeparately() {
-        orderBook.add(order11);
-        orderBook.add(order22);
+        orderBook.submit(order11);
+        orderBook.submit(order22);
 
         assertEquals(OptionalLong.of(10), orderBook.bestBid());
         assertEquals(OptionalLong.of(15), orderBook.bestAsk());
@@ -71,12 +71,12 @@ class OrderBookTest {
 
     @Test
     void rejectsNullOrder() {
-        assertThrows(NullPointerException.class, () -> orderBook.add(null));
+        assertThrows(NullPointerException.class, () -> orderBook.submit(null));
     }
 
     @Test
     void fullMatchAtSamePriceProducesOneTrade() {
-        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
 
         List<Trade> trades = orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
 
@@ -86,7 +86,7 @@ class OrderBookTest {
 
     @Test
     void noMatchWhenPricesDoNotCross() {
-        orderBook.add(new Order(1, Side.SELL, 105, 50, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 105, 50, 1000));
 
         List<Trade> trades = orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
 
@@ -97,7 +97,7 @@ class OrderBookTest {
 
     @Test
     void partialFillLeavesRemainderOfIncomingInBook() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
 
         List<Trade> trades = orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
 
@@ -108,7 +108,7 @@ class OrderBookTest {
 
     @Test
     void partialFillLeavesRemainderOfRestingInBook() {
-        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
 
         List<Trade> trades = orderBook.submit(new Order(2, Side.BUY, 100, 30, 1001));
 
@@ -119,7 +119,7 @@ class OrderBookTest {
 
     @Test
     void tradeExecutesAtRestingPrice() {
-        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
 
         List<Trade> trades = orderBook.submit(new Order(2, Side.BUY, 105, 50, 1001));
 
@@ -129,7 +129,7 @@ class OrderBookTest {
 
     @Test
     void sellIncomingMatchesBids() {
-        orderBook.add(new Order(2, Side.BUY, 100, 50, 1000));
+        orderBook.submit(new Order(2, Side.BUY, 100, 50, 1000));
 
         List<Trade> trades = orderBook.submit(new Order(1, Side.SELL, 100, 50, 1001));
 
@@ -139,8 +139,8 @@ class OrderBookTest {
 
     @Test
     void earlierOrderAtSamePriceFillsFirst() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
-        orderBook.add(new Order(2, Side.SELL, 100, 30, 1001));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(2, Side.SELL, 100, 30, 1001));
 
         List<Trade> trades = orderBook.submit(new Order(3, Side.BUY, 100, 30, 1002));
 
@@ -150,8 +150,8 @@ class OrderBookTest {
 
     @Test
     void incomingSweepsMultiplePriceLevels() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
-        orderBook.add(new Order(2, Side.SELL, 101, 30, 1001));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(2, Side.SELL, 101, 30, 1001));
 
         List<Trade> trades = orderBook.submit(new Order(3, Side.BUY, 101, 50, 1002));
 
@@ -161,7 +161,7 @@ class OrderBookTest {
 
     @Test
     void cancelRemovesOrderFromBook() {
-        orderBook.add(new Order(1, Side.BUY, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
         assertTrue(orderBook.cancel(1));
         assertTrue(orderBook.isEmpty());
@@ -174,7 +174,7 @@ class OrderBookTest {
 
     @Test
     void cancelTwiceReturnsFalseSecondTime() {
-        orderBook.add(new Order(1, Side.BUY, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
         assertTrue(orderBook.cancel(1));
         assertFalse(orderBook.cancel(1));
@@ -182,8 +182,8 @@ class OrderBookTest {
 
     @Test
     void cancelKeepsOtherOrdersAtSameLevel() {
-        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
-        orderBook.add(new Order(2, Side.SELL, 100, 50, 1001));
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.submit(new Order(2, Side.SELL, 100, 50, 1001));
 
         assertTrue(orderBook.cancel(1));
 
@@ -194,7 +194,7 @@ class OrderBookTest {
 
     @Test
     void cancelledOrderIsNotMatched() {
-        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
 
         assertTrue(orderBook.cancel(1));
 
@@ -206,7 +206,7 @@ class OrderBookTest {
 
     @Test
     void filledOrderCannotBeCancelled() {
-        orderBook.add(new Order(1, Side.SELL, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
 
         orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
 
@@ -215,7 +215,7 @@ class OrderBookTest {
 
     @Test
     void partiallyFilledIncomingCanBeCancelled() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
 
         orderBook.submit(new Order(2, Side.BUY, 100, 50, 1001));
 
@@ -225,14 +225,14 @@ class OrderBookTest {
 
     @Test
     void rejectsDuplicateOrderId() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
 
-        assertThrows(IllegalArgumentException.class, () -> orderBook.add(new Order(1, Side.SELL, 100, 30, 1000)));
+        assertThrows(IllegalArgumentException.class, () -> orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000)));
     }
 
     @Test
     void marketBuyMatchesBestAsk() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
 
         List<Trade> trades = orderBook.submit(Order.market(2, Side.BUY, 30, 1001));
 
@@ -242,8 +242,8 @@ class OrderBookTest {
 
     @Test
     void marketOrderSweepsAnyPrice() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1001));
-        orderBook.add(new Order(2, Side.SELL, 105, 30, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1001));
+        orderBook.submit(new Order(2, Side.SELL, 105, 30, 1000));
 
         List<Trade> trades = orderBook.submit(Order.market(3, Side.BUY, 50, 1002));
 
@@ -254,7 +254,7 @@ class OrderBookTest {
 
     @Test
     void marketRemainderIsNotAddedToBook() {
-        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+        orderBook.submit(new Order(1, Side.SELL, 100, 30, 1000));
 
         List<Trade> trades = orderBook.submit(Order.market(2, Side.BUY, 50, 1001));
 
@@ -271,11 +271,19 @@ class OrderBookTest {
 
     @Test
     void marketSellMatchesBestBid() {
-        orderBook.add(new Order(1, Side.BUY, 100, 50, 1000));
+        orderBook.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
         List<Trade> trades = orderBook.submit(Order.market(2, Side.SELL, 50, 1001));
 
         assertEquals(List.of(new Trade(1, 2, 100, 50)), trades);
         assertTrue(orderBook.isEmpty());
+    }
+
+    @Test
+    void rejectsDuplicateIdBeforeMatching() {
+        orderBook.submit(new Order(1, Side.SELL, 100, 50, 1000));
+
+        assertThrows(IllegalArgumentException.class, () -> orderBook.submit(new Order(1, Side.BUY, 100, 50, 1001)));
+        assertEquals(OptionalLong.of(100), orderBook.bestAsk());
     }
 }

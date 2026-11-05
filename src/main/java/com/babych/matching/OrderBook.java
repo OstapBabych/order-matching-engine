@@ -13,7 +13,7 @@ public class OrderBook {
         this.orders = new HashMap<>();
     }
 
-    public void add(Order order) {
+    private void add(Order order) {
         Objects.requireNonNull(order, "order must not be null");
         if (orders.containsKey(order.getId())) {
             throw new IllegalArgumentException("order with id: " + order.getId() + " already exists");
@@ -45,6 +45,11 @@ public class OrderBook {
 
     public List<Trade> submit(Order incoming) {
         Objects.requireNonNull(incoming, "order must not be null");
+
+        if (orders.containsKey(incoming.getId())) {
+            throw new IllegalArgumentException("order with id: " + incoming.getId() + " already exists");
+        }
+
         List<Trade> trades = new ArrayList<>();
         TreeMap<Long, ArrayDeque<Order>> opposite = levelsFor(incoming.getSide().opposite());
 
