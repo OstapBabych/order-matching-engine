@@ -3,7 +3,6 @@ package com.babych.matching;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.OptionalLong;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -229,5 +228,54 @@ class OrderBookTest {
         orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
 
         assertThrows(IllegalArgumentException.class, () -> orderBook.add(new Order(1, Side.SELL, 100, 30, 1000)));
+    }
+
+    @Test
+    void marketBuyMatchesBestAsk() {
+        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+
+        List<Trade> trades = orderBook.submit(Order.market(2, Side.BUY, 30, 1001));
+
+        assertEquals(List.of(new Trade(2, 1, 100, 30)), trades);
+        assertTrue(orderBook.isEmpty());
+    }
+
+    @Test
+    void marketOrderSweepsAnyPrice() {
+        orderBook.add(new Order(1, Side.SELL, 100, 30, 1001));
+        orderBook.add(new Order(2, Side.SELL, 105, 30, 1000));
+
+        List<Trade> trades = orderBook.submit(Order.market(3, Side.BUY, 50, 1002));
+
+        assertEquals(List.of(new Trade(3, 1, 100, 30),
+                new Trade(3, 2, 105, 20)), trades);
+        assertEquals(OptionalLong.of(105), orderBook.bestAsk());
+    }
+
+    @Test
+    void marketRemainderIsNotAddedToBook() {
+        orderBook.add(new Order(1, Side.SELL, 100, 30, 1000));
+
+        List<Trade> trades = orderBook.submit(Order.market(2, Side.BUY, 50, 1001));
+
+        assertEquals(List.of(new Trade(2, 1, 100, 30)), trades);
+        assertTrue(orderBook.bestBid().isEmpty());
+    }
+
+    @Test
+    void marketOrderOnEmptyBookProducesNoTrades() {
+        orderBook.submit(Order.market(2, Side.BUY, 50, 1000));
+
+        assertTrue(orderBook.isEmpty());
+    }
+
+    @Test
+    void marketSellMatchesBestBid() {
+        orderBook.add(new Order(1, Side.BUY, 100, 50, 1000));
+
+        List<Trade> trades = orderBook.submit(Order.market(2, Side.SELL, 50, 1001));
+
+        assertEquals(List.of(new Trade(1, 2, 100, 50)), trades);
+        assertTrue(orderBook.isEmpty());
     }
 }

@@ -73,7 +73,7 @@ public class OrderBook {
 
         }
 
-        if (!incoming.isFilled()) {
+        if (!incoming.isFilled() && incoming.getOrderType() == OrderType.LIMIT) {
             add(incoming);
         }
 
@@ -105,6 +105,9 @@ public class OrderBook {
     }
 
     private boolean crosses(Order incoming, long restingPrice) {
+        if (incoming.getOrderType() == OrderType.MARKET) {
+            return true;
+        }
         return (incoming.getSide() == Side.BUY)
                 ? incoming.getPrice() >= restingPrice
                 : incoming.getPrice() <= restingPrice;
