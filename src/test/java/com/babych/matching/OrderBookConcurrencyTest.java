@@ -45,7 +45,7 @@ class OrderBookConcurrencyTest {
         pool.shutdown();
 
         Set<Long> soldIds = new HashSet<>();
-        for (Trade trade : allTrades){
+        for (Trade trade : allTrades) {
             soldIds.add(trade.sellOrderId());
         }
         assertEquals(totalSells, soldIds.size());
