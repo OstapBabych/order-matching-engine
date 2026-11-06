@@ -25,25 +25,25 @@ public class OrderBook {
         orders.put(order.getId(), order);
     }
 
-    public OptionalLong bestBid() {
+    public synchronized OptionalLong bestBid() {
         if (bids.isEmpty()) {
             return OptionalLong.empty();
         }
         return OptionalLong.of(bids.firstKey());
     }
 
-    public OptionalLong bestAsk() {
+    public synchronized OptionalLong bestAsk() {
         if (asks.isEmpty()) {
             return OptionalLong.empty();
         }
         return OptionalLong.of(asks.firstKey());
     }
 
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return bids.isEmpty() && asks.isEmpty();
     }
 
-    public List<Trade> submit(Order incoming) {
+    public synchronized List<Trade> submit(Order incoming) {
         Objects.requireNonNull(incoming, "order must not be null");
 
         if (orders.containsKey(incoming.getId())) {
@@ -85,7 +85,7 @@ public class OrderBook {
         return trades;
     }
 
-    public boolean cancel(long orderId) {
+    public synchronized boolean cancel(long orderId) {
         Order order = orders.get(orderId);
 
         if (order == null) {
