@@ -12,7 +12,7 @@ class OrderBookConcurrencyTest {
     @Test
     void concurrentSubmitsNeverFillTheSameOrderTwice() throws Exception {
         int threads = 8;
-        int ordersPerThread = 1_250;
+        int ordersPerThread = 1250;
         int totalSells = threads * ordersPerThread;
 
         OrderBook orderBook = new OrderBook();
@@ -21,7 +21,7 @@ class OrderBookConcurrencyTest {
             orderBook.submit(new Order(id, Side.SELL, 100, 1, 0));
         }
 
-        AtomicLong nextId = new AtomicLong(1_000_000);
+        AtomicLong nextId = new AtomicLong(100000000);
         Queue<Trade> allTrades = new ConcurrentLinkedQueue<>();
         CountDownLatch start = new CountDownLatch(1);
         ExecutorService pool = Executors.newFixedThreadPool(threads);

@@ -16,7 +16,7 @@ class MatchingEngineTest {
     MatchingEngine engine = new MatchingEngine(1000);
 
     @BeforeEach
-    void startEngine(){
+    void startEngine() {
         engine.start();
     }
 
@@ -46,7 +46,7 @@ class MatchingEngineTest {
     }
 
     @Test
-    void duplicateIdErrorReachesClient() throws Exception{
+    void duplicateIdErrorReachesClient() throws Exception {
         engine.submit(new Order(1, Side.SELL, 100, 50, 1000));
         CompletableFuture<List<Trade>> future = engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
@@ -55,7 +55,7 @@ class MatchingEngineTest {
     }
 
     @Test
-    void matcherSurvivesFailedOrder() throws Exception{
+    void matcherSurvivesFailedOrder() throws Exception {
         engine.submit(new Order(1, Side.SELL, 100, 50, 1000));
         CompletableFuture<List<Trade>> future = engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
@@ -68,7 +68,7 @@ class MatchingEngineTest {
     }
 
     @Test
-    void startingTwiceThrows(){
+    void startingTwiceThrows() {
         assertThrows(IllegalStateException.class, () -> engine.start());
     }
 
@@ -96,9 +96,9 @@ class MatchingEngineTest {
     void pendingOrdersFailOnStop() throws Exception {
         MatchingEngine engine1 = new MatchingEngine(1000);
 
-        CompletableFuture<List<Trade>> first  = engine1.submit(new Order(1, Side.BUY, 10, 100, 1000));
+        CompletableFuture<List<Trade>> first = engine1.submit(new Order(1, Side.BUY, 10, 100, 1000));
         CompletableFuture<List<Trade>> second = engine1.submit(new Order(2, Side.BUY, 10, 100, 1001));
-        CompletableFuture<List<Trade>> third  = engine1.submit(new Order(3, Side.BUY, 10, 100, 1002));
+        CompletableFuture<List<Trade>> third = engine1.submit(new Order(3, Side.BUY, 10, 100, 1002));
 
         engine1.stop();
 

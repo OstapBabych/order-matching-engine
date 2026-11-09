@@ -31,8 +31,8 @@ public class MatchingEngine {
         CompletableFuture<List<Trade>> future = new CompletableFuture<>();
         Request request = new Request(order, future);
         queue.put(request);
-        if (stopped && queue.remove(request)){
-            throw new IllegalStateException("engine stopped");
+        if (stopped && queue.remove(request)) {
+            request.result().completeExceptionally(new IllegalStateException("engine stopped"));
         }
         return future;
     }
