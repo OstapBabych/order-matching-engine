@@ -29,7 +29,11 @@ public class MatchingEngine {
         }
 
         CompletableFuture<List<Trade>> future = new CompletableFuture<>();
-        queue.put(new Request(order, future));
+        Request request = new Request(order, future);
+        queue.put(request);
+        if (stopped && queue.remove(request)){
+            throw new IllegalStateException("engine stopped");
+        }
         return future;
     }
 
