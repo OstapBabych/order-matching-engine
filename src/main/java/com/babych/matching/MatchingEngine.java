@@ -1,5 +1,6 @@
 package com.babych.matching;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -10,6 +11,7 @@ public class MatchingEngine {
     private final OrderBook book;
     private final BlockingQueue<Request> queue;
     private Thread matcherThread;
+    private volatile boolean stopped;
 
     public MatchingEngine(int capacity) {
         if (capacity <= 0) {
@@ -21,6 +23,10 @@ public class MatchingEngine {
 
     public CompletableFuture<List<Trade>> submit(Order order) throws InterruptedException {
         Objects.requireNonNull(order, "order must not be null");
+
+        if (stopped) {
+            throw new IllegalStateException("engine stopped");
+        }
 
         CompletableFuture<List<Trade>> future = new CompletableFuture<>();
         queue.put(new Request(order, future));
@@ -44,10 +50,29 @@ public class MatchingEngine {
     }
 
     public void start() {
-        if (matcherThread != null){
+        if (matcherThread != null) {
             throw new IllegalStateException("engine already started");
         }
         matcherThread = new Thread(this::runLoop, "matcher");
         matcherThread.start();
+    }
+
+    public void stop() throws InterruptedException {
+        stopped = true;
+
+        if (matcherThread != null) {
+            matcherThread.interrupt();
+            matcherThread.join();
+        }
+
+        List<Request> pending = new ArrayList<>();
+        queue.drainTo(pending);
+        for (Request request : pending) {
+            request.result().completeExceptionally(new IllegalStateException("engine stopped"));
+        }
+    }
+
+    public boolean isRunning() {
+        return matcherThread != null && matcherThread.isAlive();
     }
 }

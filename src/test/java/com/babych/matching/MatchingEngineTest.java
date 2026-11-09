@@ -1,5 +1,6 @@
 package com.babych.matching;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,11 @@ class MatchingEngineTest {
     @BeforeEach
     void startEngine(){
         engine.start();
+    }
+
+    @AfterEach
+    void stopEngine() throws InterruptedException {
+        engine.stop();
     }
 
     @Test
@@ -66,4 +72,39 @@ class MatchingEngineTest {
         assertThrows(IllegalStateException.class, () -> engine.start());
     }
 
+    @Test
+    void stopTerminatesMatcherThread() throws InterruptedException {
+        assertTrue(engine.isRunning());
+
+        engine.stop();
+        assertFalse(engine.isRunning());
+    }
+
+    @Test
+    void submitAfterStopThrows() throws InterruptedException {
+        engine.stop();
+        assertThrows(IllegalStateException.class, () -> engine.submit(new Order(1, Side.BUY, 10, 100, 1000)));
+    }
+
+    @Test
+    void stopTwiceIsSafe() throws InterruptedException {
+        engine.stop();
+        assertDoesNotThrow(() -> engine.stop());
+    }
+
+    @Test
+    void pendingOrdersFailOnStop() throws Exception {
+        MatchingEngine engine1 = new MatchingEngine(1000);
+
+        CompletableFuture<List<Trade>> first  = engine1.submit(new Order(1, Side.BUY, 10, 100, 1000));
+        CompletableFuture<List<Trade>> second = engine1.submit(new Order(2, Side.BUY, 10, 100, 1001));
+        CompletableFuture<List<Trade>> third  = engine1.submit(new Order(3, Side.BUY, 10, 100, 1002));
+
+        engine1.stop();
+
+        for (CompletableFuture<List<Trade>> future : List.of(first, second, third)) {
+            ExecutionException exception = assertThrows(ExecutionException.class, () -> future.get(1, TimeUnit.SECONDS));
+            assertInstanceOf(IllegalStateException.class, exception.getCause());
+        }
+    }
 }
