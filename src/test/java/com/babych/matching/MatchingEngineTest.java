@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatchingEngineTest {
@@ -29,7 +31,7 @@ class MatchingEngineTest {
     void orderWithoutMatchProducesNoTrades() throws Exception {
         CompletableFuture<List<Trade>> future = engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
-        List<Trade> trades = future.get(1, TimeUnit.SECONDS);
+        List<Trade> trades = future.get(1, SECONDS);
 
         assertTrue(trades.isEmpty());
     }
@@ -37,10 +39,10 @@ class MatchingEngineTest {
     @Test
     void matchingOrdersProduceTrade() throws Exception {
         CompletableFuture<List<Trade>> futureBuy = engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
-        futureBuy.get(1, TimeUnit.SECONDS);
+        futureBuy.get(1, SECONDS);
 
         CompletableFuture<List<Trade>> futureSell = engine.submit(new Order(2, Side.SELL, 100, 50, 1001));
-        List<Trade> trades = futureSell.get(1, TimeUnit.SECONDS);
+        List<Trade> trades = futureSell.get(1, SECONDS);
 
         assertEquals(List.of(new Trade(1, 2, 100, 50)), trades);
     }
@@ -50,7 +52,7 @@ class MatchingEngineTest {
         engine.submit(new Order(1, Side.SELL, 100, 50, 1000));
         CompletableFuture<List<Trade>> future = engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
-        ExecutionException exception = assertThrows(ExecutionException.class, () -> future.get(1, TimeUnit.SECONDS));
+        ExecutionException exception = assertThrows(ExecutionException.class, () -> future.get(1, SECONDS));
         assertInstanceOf(IllegalArgumentException.class, exception.getCause());
     }
 
@@ -59,10 +61,10 @@ class MatchingEngineTest {
         engine.submit(new Order(1, Side.SELL, 100, 50, 1000));
         CompletableFuture<List<Trade>> future = engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
 
-        assertThrows(ExecutionException.class, () -> future.get(1, TimeUnit.SECONDS));
+        assertThrows(ExecutionException.class, () -> future.get(1, SECONDS));
 
         CompletableFuture<List<Trade>> next = engine.submit(new Order(2, Side.BUY, 100, 50, 1000));
-        List<Trade> trades = next.get(1, TimeUnit.SECONDS);
+        List<Trade> trades = next.get(1, SECONDS);
 
         assertEquals(List.of(new Trade(2, 1, 100, 50)), trades);
     }
@@ -103,8 +105,38 @@ class MatchingEngineTest {
         engine1.stop();
 
         for (CompletableFuture<List<Trade>> future : List.of(first, second, third)) {
-            ExecutionException exception = assertThrows(ExecutionException.class, () -> future.get(1, TimeUnit.SECONDS));
+            ExecutionException exception = assertThrows(ExecutionException.class, () -> future.get(1, SECONDS));
             assertInstanceOf(IllegalStateException.class, exception.getCause());
         }
+    }
+
+    @Test
+    void cancelRestingOrder() throws InterruptedException, ExecutionException, TimeoutException {
+        engine.submit(new Order(1, Side.BUY, 100, 50, 1000));
+
+        assertTrue(engine.cancel(1).get(1, SECONDS));
+    }
+
+    @Test
+    void cancelUnknownOrderReturnsFalse() throws InterruptedException, ExecutionException, TimeoutException {
+        assertFalse(engine.cancel(999).get(1, SECONDS));
+    }
+
+    @Test
+    void cancelledOrderDoesNotMatch() throws InterruptedException, ExecutionException, TimeoutException {
+        engine.submit(new Order(1, Side.SELL, 100, 50, 1000));
+
+        assertTrue(engine.cancel(1).get(1, SECONDS));
+
+        List<Trade> trades = engine.submit(new Order(2, Side.BUY, 100, 50, 1001)).get(1, SECONDS);
+
+        assertTrue(trades.isEmpty());
+    }
+
+    @Test
+    void cancelAfterStopThrows() throws InterruptedException {
+        engine.stop();
+
+        assertThrows(IllegalStateException.class, () -> engine.cancel(1));
     }
 }

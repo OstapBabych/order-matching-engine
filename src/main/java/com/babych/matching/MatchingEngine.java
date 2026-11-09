@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MatchingEngine {
     private final OrderBook book;
-    private final BlockingQueue<Request> queue;
+    private final BlockingQueue<Command> queue;
     private Thread matcherThread;
     private volatile boolean stopped;
 
@@ -29,10 +29,24 @@ public class MatchingEngine {
         }
 
         CompletableFuture<List<Trade>> future = new CompletableFuture<>();
-        Request request = new Request(order, future);
-        queue.put(request);
-        if (stopped && queue.remove(request)) {
-            request.result().completeExceptionally(new IllegalStateException("engine stopped"));
+        SubmitCommand command = new SubmitCommand(order, future);
+        queue.put(command);
+        if (stopped && queue.remove(command)) {
+            command.result().completeExceptionally(new IllegalStateException("engine stopped"));
+        }
+        return future;
+    }
+
+    public CompletableFuture<Boolean> cancel(long orderId) throws InterruptedException {
+        if (stopped) {
+            throw new IllegalStateException("engine stopped");
+        }
+
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        CancelCommand command = new CancelCommand(orderId, future);
+        queue.put(command);
+        if (stopped && queue.remove(command)) {
+            command.result().completeExceptionally(new IllegalStateException("engine stopped"));
         }
         return future;
     }
@@ -40,12 +54,19 @@ public class MatchingEngine {
     private void runLoop() {
         try {
             while (true) {
-                Request request = queue.take();
+                Command command = queue.take();
+
                 try {
-                    List<Trade> trades = book.submit(request.order());
-                    request.result().complete(trades);
+                    switch (command) {
+                        case SubmitCommand submit -> {
+                            submit.result().complete(book.submit(submit.order()));
+                        }
+                        case CancelCommand cancel -> {
+                            cancel.result().complete(book.cancel(cancel.orderId()));
+                        }
+                    }
                 } catch (RuntimeException e) {
-                    request.result().completeExceptionally(e);
+                    command.result().completeExceptionally(e);
                 }
             }
         } catch (InterruptedException e) {
@@ -69,10 +90,10 @@ public class MatchingEngine {
             matcherThread.join();
         }
 
-        List<Request> pending = new ArrayList<>();
+        List<Command> pending = new ArrayList<>();
         queue.drainTo(pending);
-        for (Request request : pending) {
-            request.result().completeExceptionally(new IllegalStateException("engine stopped"));
+        for (Command command : pending) {
+            command.result().completeExceptionally(new IllegalStateException("engine stopped"));
         }
     }
 
