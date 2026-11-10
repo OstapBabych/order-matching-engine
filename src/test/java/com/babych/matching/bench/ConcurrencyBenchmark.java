@@ -21,7 +21,7 @@ public class ConcurrencyBenchmark {
         AtomicLong nextId;
 
         @Setup(Level.Iteration)
-        public void setUp(){
+        public void setUp() {
             book = new OrderBook();
             nextId = new AtomicLong();
         }
@@ -33,27 +33,27 @@ public class ConcurrencyBenchmark {
         AtomicLong nextId;
 
         @Setup(Level.Trial)
-        public void setUp(){
+        public void setUp() {
             engine = new MatchingEngine(1024);
             engine.start();
             nextId = new AtomicLong();
         }
 
         @TearDown(Level.Trial)
-        public void tearDown() throws InterruptedException{
+        public void tearDown() throws InterruptedException {
             engine.stop();
         }
     }
 
     @Benchmark
-    public List<Trade> synchronizedBook(SyncState state){
+    public List<Trade> synchronizedBook(SyncState state) {
         long id = state.nextId.incrementAndGet();
         Side side = (id % 2 == 0) ? Side.BUY : Side.SELL;
         return state.book.submit(new Order(id, side, 100, 1, 0));
     }
 
     @Benchmark
-    public List<Trade> singleWriterEngine(EngineState state) throws Exception{
+    public List<Trade> singleWriterEngine(EngineState state) throws Exception {
         long id = state.nextId.incrementAndGet();
         Side side = (id % 2 == 0) ? Side.BUY : Side.SELL;
         return state.engine.submit(new Order(id, side, 100, 1, 0)).get();
