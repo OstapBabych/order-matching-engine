@@ -7,7 +7,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 public class BenchmarkRunner {
     public static void main(String[] args) throws Exception {
         Options options = new OptionsBuilder()
-                .include(OrderBookBenchmark.class.getSimpleName())
+                .include(OrderBookDepthBenchmark.class.getSimpleName())
                 .build();
         new Runner(options).run();
     }
