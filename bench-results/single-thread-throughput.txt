@@ -1,0 +1,392 @@
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookBenchmark.submitAlternatingBuySell
+
+# Run progress: 0.00% complete, ETA 00:02:48
+# Fork: 1 of 3
+# Warmup Iteration   1: 32541412.142 ops/s
+# Warmup Iteration   2: 37392684.935 ops/s
+# Warmup Iteration   3: 42394895.909 ops/s
+Iteration   1: 42667835.886 ops/s
+Iteration   2: 42651898.695 ops/s
+Iteration   3: 42677605.513 ops/s
+Iteration   4: 42575566.208 ops/s
+Iteration   5: 42505939.130 ops/s
+
+# Run progress: 4.76% complete, ETA 00:02:52
+# Fork: 2 of 3
+# Warmup Iteration   1: 32950613.629 ops/s
+# Warmup Iteration   2: 33322002.304 ops/s
+# Warmup Iteration   3: 40275438.306 ops/s
+Iteration   1: 40797391.501 ops/s
+Iteration   2: 41027421.730 ops/s
+Iteration   3: 41346102.294 ops/s
+Iteration   4: 41278984.214 ops/s
+Iteration   5: 41471208.123 ops/s
+
+# Run progress: 9.52% complete, ETA 00:02:43
+# Fork: 3 of 3
+# Warmup Iteration   1: 33841253.456 ops/s
+# Warmup Iteration   2: 37002065.482 ops/s
+# Warmup Iteration   3: 42442121.211 ops/s
+Iteration   1: 42517794.065 ops/s
+Iteration   2: 42250102.160 ops/s
+Iteration   3: 42456399.174 ops/s
+Iteration   4: 42375086.970 ops/s
+Iteration   5: 42640007.213 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookBenchmark.submitAlternatingBuySell":
+  42082622.858 ±(99.9%) 729756.691 ops/s [Average]
+  (min, avg, max) = (40797391.501, 42082622.858, 42677605.513), stdev = 682614.862
+  CI (99.9%): [41352866.167, 42812379.550] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookDepthBenchmark.addAndCancel
+# Parameters: (levels = 10)
+
+# Run progress: 14.29% complete, ETA 00:02:34
+# Fork: 1 of 3
+# Warmup Iteration   1: 33714457.735 ops/s
+# Warmup Iteration   2: 36203549.384 ops/s
+# Warmup Iteration   3: 36126242.659 ops/s
+Iteration   1: 36073431.837 ops/s
+Iteration   2: 36061646.854 ops/s
+Iteration   3: 36243430.960 ops/s
+Iteration   4: 36298728.447 ops/s
+Iteration   5: 36182464.872 ops/s
+
+# Run progress: 19.05% complete, ETA 00:02:25
+# Fork: 2 of 3
+# Warmup Iteration   1: 34494967.397 ops/s
+# Warmup Iteration   2: 37848499.134 ops/s
+# Warmup Iteration   3: 39013355.062 ops/s
+Iteration   1: 39077088.029 ops/s
+Iteration   2: 39072327.899 ops/s
+Iteration   3: 39063104.716 ops/s
+Iteration   4: 38771555.269 ops/s
+Iteration   5: 38926883.701 ops/s
+
+# Run progress: 23.81% complete, ETA 00:02:17
+# Fork: 3 of 3
+# Warmup Iteration   1: 33210452.765 ops/s
+# Warmup Iteration   2: 36244484.322 ops/s
+# Warmup Iteration   3: 36335810.053 ops/s
+Iteration   1: 36324869.150 ops/s
+Iteration   2: 36345227.114 ops/s
+Iteration   3: 36331736.099 ops/s
+Iteration   4: 36291754.499 ops/s
+Iteration   5: 36344973.265 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookDepthBenchmark.addAndCancel":
+  37160614.847 ±(99.9%) 1430389.160 ops/s [Average]
+  (min, avg, max) = (36061646.854, 37160614.847, 39077088.029), stdev = 1337986.908
+  CI (99.9%): [35730225.687, 38591004.008] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookDepthBenchmark.addAndCancel
+# Parameters: (levels = 100)
+
+# Run progress: 28.57% complete, ETA 00:02:08
+# Fork: 1 of 3
+# Warmup Iteration   1: 26856611.687 ops/s
+# Warmup Iteration   2: 30075235.893 ops/s
+# Warmup Iteration   3: 29824732.262 ops/s
+Iteration   1: 29949025.322 ops/s
+Iteration   2: 30049495.971 ops/s
+Iteration   3: 30022705.238 ops/s
+Iteration   4: 30050077.164 ops/s
+Iteration   5: 29998148.316 ops/s
+
+# Run progress: 33.33% complete, ETA 00:02:00
+# Fork: 2 of 3
+# Warmup Iteration   1: 27571726.438 ops/s
+# Warmup Iteration   2: 29379383.867 ops/s
+# Warmup Iteration   3: 29526383.307 ops/s
+Iteration   1: 29461571.344 ops/s
+Iteration   2: 29531255.641 ops/s
+Iteration   3: 29411306.357 ops/s
+Iteration   4: 29449139.793 ops/s
+Iteration   5: 29541177.986 ops/s
+
+# Run progress: 38.10% complete, ETA 00:01:51
+# Fork: 3 of 3
+# Warmup Iteration   1: 28735100.996 ops/s
+# Warmup Iteration   2: 31358994.734 ops/s
+# Warmup Iteration   3: 31383717.132 ops/s
+Iteration   1: 31355636.473 ops/s
+Iteration   2: 31434510.023 ops/s
+Iteration   3: 31384661.306 ops/s
+Iteration   4: 31268075.153 ops/s
+Iteration   5: 31298969.693 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookDepthBenchmark.addAndCancel":
+  30280383.719 ±(99.9%) 871661.196 ops/s [Average]
+  (min, avg, max) = (29411306.357, 30280383.719, 31434510.023), stdev = 815352.424
+  CI (99.9%): [29408722.522, 31152044.915] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookDepthBenchmark.addAndCancel
+# Parameters: (levels = 1000)
+
+# Run progress: 42.86% complete, ETA 00:01:43
+# Fork: 1 of 3
+# Warmup Iteration   1: 23446963.303 ops/s
+# Warmup Iteration   2: 23208463.091 ops/s
+# Warmup Iteration   3: 23416214.890 ops/s
+Iteration   1: 23327540.774 ops/s
+Iteration   2: 23412023.797 ops/s
+Iteration   3: 23505688.404 ops/s
+Iteration   4: 23422047.900 ops/s
+Iteration   5: 23413155.381 ops/s
+
+# Run progress: 47.62% complete, ETA 00:01:34
+# Fork: 2 of 3
+# Warmup Iteration   1: 22818303.148 ops/s
+# Warmup Iteration   2: 23523538.642 ops/s
+# Warmup Iteration   3: 23876362.286 ops/s
+Iteration   1: 24004317.191 ops/s
+Iteration   2: 24004393.845 ops/s
+Iteration   3: 24019825.994 ops/s
+Iteration   4: 23973497.342 ops/s
+Iteration   5: 23930248.588 ops/s
+
+# Run progress: 52.38% complete, ETA 00:01:25
+# Fork: 3 of 3
+# Warmup Iteration   1: 23394585.909 ops/s
+# Warmup Iteration   2: 23993112.846 ops/s
+# Warmup Iteration   3: 23847684.265 ops/s
+Iteration   1: 24132384.290 ops/s
+Iteration   2: 24013552.737 ops/s
+Iteration   3: 24118930.091 ops/s
+Iteration   4: 24172455.827 ops/s
+Iteration   5: 24109095.228 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookDepthBenchmark.addAndCancel":
+  23837277.159 ±(99.9%) 338427.581 ops/s [Average]
+  (min, avg, max) = (23327540.774, 23837277.159, 24172455.827), stdev = 316565.369
+  CI (99.9%): [23498849.578, 24175704.740] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookDepthBenchmark.matchAgainstDeepBook
+# Parameters: (levels = 10)
+
+# Run progress: 57.14% complete, ETA 00:01:17
+# Fork: 1 of 3
+# Warmup Iteration   1: 54775635.795 ops/s
+# Warmup Iteration   2: 85753913.738 ops/s
+# Warmup Iteration   3: 80424179.600 ops/s
+Iteration   1: 80643153.980 ops/s
+Iteration   2: 80689901.527 ops/s
+Iteration   3: 80714255.601 ops/s
+Iteration   4: 80550523.874 ops/s
+Iteration   5: 80616223.464 ops/s
+
+# Run progress: 61.90% complete, ETA 00:01:08
+# Fork: 2 of 3
+# Warmup Iteration   1: 55049351.548 ops/s
+# Warmup Iteration   2: 85663723.387 ops/s
+# Warmup Iteration   3: 80451641.776 ops/s
+Iteration   1: 80256440.731 ops/s
+Iteration   2: 80979933.879 ops/s
+Iteration   3: 80933209.564 ops/s
+Iteration   4: 80631520.426 ops/s
+Iteration   5: 80698990.291 ops/s
+
+# Run progress: 66.67% complete, ETA 00:01:00
+# Fork: 3 of 3
+# Warmup Iteration   1: 54997914.669 ops/s
+# Warmup Iteration   2: 86162417.581 ops/s
+# Warmup Iteration   3: 80239996.242 ops/s
+Iteration   1: 80851840.262 ops/s
+Iteration   2: 80575581.356 ops/s
+Iteration   3: 80596713.576 ops/s
+Iteration   4: 80677912.919 ops/s
+Iteration   5: 80489989.232 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookDepthBenchmark.matchAgainstDeepBook":
+  80660412.712 ±(99.9%) 188957.335 ops/s [Average]
+  (min, avg, max) = (80256440.731, 80660412.712, 80979933.879), stdev = 176750.809
+  CI (99.9%): [80471455.377, 80849370.047] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookDepthBenchmark.matchAgainstDeepBook
+# Parameters: (levels = 100)
+
+# Run progress: 71.43% complete, ETA 00:00:51
+# Fork: 1 of 3
+# Warmup Iteration   1: 78603277.959 ops/s
+# Warmup Iteration   2: 84798163.432 ops/s
+# Warmup Iteration   3: 78918609.260 ops/s
+Iteration   1: 78039616.123 ops/s
+Iteration   2: 78981257.577 ops/s
+Iteration   3: 78274539.156 ops/s
+Iteration   4: 78574044.147 ops/s
+Iteration   5: 78858679.049 ops/s
+
+# Run progress: 76.19% complete, ETA 00:00:42
+# Fork: 2 of 3
+# Warmup Iteration   1: 54397263.247 ops/s
+# Warmup Iteration   2: 83945309.353 ops/s
+# Warmup Iteration   3: 77597229.360 ops/s
+Iteration   1: 78435656.022 ops/s
+Iteration   2: 78359059.248 ops/s
+Iteration   3: 78277846.831 ops/s
+Iteration   4: 78518967.029 ops/s
+Iteration   5: 65031566.584 ops/s
+
+# Run progress: 80.95% complete, ETA 00:00:34
+# Fork: 3 of 3
+# Warmup Iteration   1: 54203407.418 ops/s
+# Warmup Iteration   2: 84470354.664 ops/s
+# Warmup Iteration   3: 78311617.086 ops/s
+Iteration   1: 78142760.395 ops/s
+Iteration   2: 78833478.224 ops/s
+Iteration   3: 78957117.530 ops/s
+Iteration   4: 78619539.361 ops/s
+Iteration   5: 78998313.444 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookDepthBenchmark.matchAgainstDeepBook":
+  77660162.715 ±(99.9%) 3749682.847 ops/s [Average]
+  (min, avg, max) = (65031566.584, 77660162.715, 78998313.444), stdev = 3507455.662
+  CI (99.9%): [73910479.867, 81409845.562] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.OrderBookDepthBenchmark.matchAgainstDeepBook
+# Parameters: (levels = 1000)
+
+# Run progress: 85.71% complete, ETA 00:00:25
+# Fork: 1 of 3
+# Warmup Iteration   1: 53481749.884 ops/s
+# Warmup Iteration   2: 54275291.837 ops/s
+# Warmup Iteration   3: 53754215.056 ops/s
+Iteration   1: 53312913.500 ops/s
+Iteration   2: 53270008.507 ops/s
+Iteration   3: 53307351.252 ops/s
+Iteration   4: 53785897.398 ops/s
+Iteration   5: 53563859.977 ops/s
+
+# Run progress: 90.48% complete, ETA 00:00:17
+# Fork: 2 of 3
+# Warmup Iteration   1: 53827186.484 ops/s
+# Warmup Iteration   2: 55227764.244 ops/s
+# Warmup Iteration   3: 54093592.168 ops/s
+Iteration   1: 54224212.794 ops/s
+Iteration   2: 54168681.076 ops/s
+Iteration   3: 53986018.449 ops/s
+Iteration   4: 54231191.860 ops/s
+Iteration   5: 53902380.784 ops/s
+
+# Run progress: 95.24% complete, ETA 00:00:08
+# Fork: 3 of 3
+# Warmup Iteration   1: 52027918.811 ops/s
+# Warmup Iteration   2: 52722665.017 ops/s
+# Warmup Iteration   3: 51665802.686 ops/s
+Iteration   1: 51705285.865 ops/s
+Iteration   2: 51724646.383 ops/s
+Iteration   3: 51830493.542 ops/s
+Iteration   4: 51620374.981 ops/s
+Iteration   5: 51835207.088 ops/s
+
+
+Result "com.babych.matching.bench.OrderBookDepthBenchmark.matchAgainstDeepBook":
+  53097901.564 ±(99.9%) 1112271.621 ops/s [Average]
+  (min, avg, max) = (51620374.981, 53097901.564, 54231191.860), stdev = 1040419.565
+  CI (99.9%): [51985629.943, 54210173.185] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:03:00
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                                     (levels)   Mode  Cnt         Score         Error  Units
+OrderBookBenchmark.submitAlternatingBuySell        N/A  thrpt   15  42082622.858 ±  729756.691  ops/s
+OrderBookDepthBenchmark.addAndCancel                10  thrpt   15  37160614.847 ± 1430389.160  ops/s
+OrderBookDepthBenchmark.addAndCancel               100  thrpt   15  30280383.719 ±  871661.196  ops/s
+OrderBookDepthBenchmark.addAndCancel              1000  thrpt   15  23837277.159 ±  338427.581  ops/s
+OrderBookDepthBenchmark.matchAgainstDeepBook        10  thrpt   15  80660412.712 ±  188957.335  ops/s
+OrderBookDepthBenchmark.matchAgainstDeepBook       100  thrpt   15  77660162.715 ± 3749682.847  ops/s
+OrderBookDepthBenchmark.matchAgainstDeepBook      1000  thrpt   15  53097901.564 ± 1112271.621  ops/s

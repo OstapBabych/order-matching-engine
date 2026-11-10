@@ -15,6 +15,8 @@ public class LatencyRunner {
                     .timeUnit(TimeUnit.NANOSECONDS)
                     .include(ConcurrencyBenchmark.class.getSimpleName())
                     .threads(threads)
+                    .forks(3)
+                    .output("bench-results/latency-" + threads + "-threads.txt")
                     .build();
 
             new Runner(options).run();

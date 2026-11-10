@@ -1,0 +1,121 @@
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.ConcurrencyBenchmark.singleWriterEngine
+
+# Run progress: 0.00% complete, ETA 00:00:48
+# Fork: 1 of 3
+# Warmup Iteration   1: 206266.607 ops/s
+# Warmup Iteration   2: 195183.898 ops/s
+# Warmup Iteration   3: 202566.114 ops/s
+Iteration   1: 221307.537 ops/s
+Iteration   2: 211072.931 ops/s
+Iteration   3: 204687.991 ops/s
+Iteration   4: 231180.683 ops/s
+Iteration   5: 241039.390 ops/s
+
+# Run progress: 16.67% complete, ETA 00:00:42
+# Fork: 2 of 3
+# Warmup Iteration   1: 215142.739 ops/s
+# Warmup Iteration   2: 203040.888 ops/s
+# Warmup Iteration   3: 213272.625 ops/s
+Iteration   1: 212741.178 ops/s
+Iteration   2: 201541.807 ops/s
+Iteration   3: 221143.088 ops/s
+Iteration   4: 255569.016 ops/s
+Iteration   5: 252792.370 ops/s
+
+# Run progress: 33.33% complete, ETA 00:00:34
+# Fork: 3 of 3
+# Warmup Iteration   1: 227341.246 ops/s
+# Warmup Iteration   2: 206933.203 ops/s
+# Warmup Iteration   3: 210975.354 ops/s
+Iteration   1: 227559.394 ops/s
+Iteration   2: 225156.265 ops/s
+Iteration   3: 238807.075 ops/s
+Iteration   4: 277345.046 ops/s
+Iteration   5: 273178.797 ops/s
+
+
+Result "com.babych.matching.bench.ConcurrencyBenchmark.singleWriterEngine":
+  233008.171 ±(99.9%) 24964.681 ops/s [Average]
+  (min, avg, max) = (201541.807, 233008.171, 277345.046), stdev = 23351.978
+  CI (99.9%): [208043.490, 257972.852] (assumes normal distribution)
+
+
+# JMH version: 1.37
+# VM version: JDK 21.0.13, OpenJDK 64-Bit Server VM, 21.0.13+9-LTS
+# VM invoker: /Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java
+# VM options: -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49517 -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
+# Blackhole mode: compiler (auto-detected, use -Djmh.blackhole.autoDetect=false to disable)
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 1 s each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Throughput, ops/time
+# Benchmark: com.babych.matching.bench.ConcurrencyBenchmark.synchronizedBook
+
+# Run progress: 50.00% complete, ETA 00:00:25
+# Fork: 1 of 3
+# Warmup Iteration   1: 30873952.361 ops/s
+# Warmup Iteration   2: 37085226.659 ops/s
+# Warmup Iteration   3: 41876352.552 ops/s
+Iteration   1: 41925621.827 ops/s
+Iteration   2: 41816033.030 ops/s
+Iteration   3: 41866765.734 ops/s
+Iteration   4: 41746457.075 ops/s
+Iteration   5: 41817101.440 ops/s
+
+# Run progress: 66.67% complete, ETA 00:00:17
+# Fork: 2 of 3
+# Warmup Iteration   1: 33146215.596 ops/s
+# Warmup Iteration   2: 36520374.343 ops/s
+# Warmup Iteration   3: 34450108.689 ops/s
+Iteration   1: 41129451.412 ops/s
+Iteration   2: 41062518.469 ops/s
+Iteration   3: 41129129.745 ops/s
+Iteration   4: 41134552.347 ops/s
+Iteration   5: 41144145.078 ops/s
+
+# Run progress: 83.33% complete, ETA 00:00:08
+# Fork: 3 of 3
+# Warmup Iteration   1: 32278209.094 ops/s
+# Warmup Iteration   2: 36067520.194 ops/s
+# Warmup Iteration   3: 41459633.931 ops/s
+Iteration   1: 41503480.201 ops/s
+Iteration   2: 41408135.733 ops/s
+Iteration   3: 41266355.973 ops/s
+Iteration   4: 41515104.386 ops/s
+Iteration   5: 41467412.460 ops/s
+
+
+Result "com.babych.matching.bench.ConcurrencyBenchmark.synchronizedBook":
+  41462150.994 ±(99.9%) 331496.324 ops/s [Average]
+  (min, avg, max) = (41062518.469, 41462150.994, 41925621.827), stdev = 310081.868
+  CI (99.9%): [41130654.669, 41793647.318] (assumes normal distribution)
+
+
+# Run complete. Total time: 00:00:51
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+NOTE: Current JVM experimentally supports Compiler Blackholes, and they are in use. Please exercise
+extra caution when trusting the results, look into the generated code to check the benchmark still
+works, and factor in a small probability of new VM bugs. Additionally, while comparisons between
+different JVMs are already problematic, the performance difference caused by different Blackhole
+modes can be very significant. Please make sure you use the consistent Blackhole mode for comparisons.
+
+Benchmark                                 Mode  Cnt         Score        Error  Units
+ConcurrencyBenchmark.singleWriterEngine  thrpt   15    233008.171 ±  24964.681  ops/s
+ConcurrencyBenchmark.synchronizedBook    thrpt   15  41462150.994 ± 331496.324  ops/s
