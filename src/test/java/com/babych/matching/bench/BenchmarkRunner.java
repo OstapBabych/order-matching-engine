@@ -6,9 +6,12 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 public class BenchmarkRunner {
     public static void main(String[] args) throws Exception {
-        Options options = new OptionsBuilder()
-                .include(OrderBookDepthBenchmark.class.getSimpleName())
-                .build();
-        new Runner(options).run();
+        for (int threads : new int[]{1, 2, 4, 8}) {
+            Options options = new OptionsBuilder()
+                    .include(ConcurrencyBenchmark.class.getSimpleName())
+                    .threads(threads)
+                    .build();
+            new Runner(options).run();
+        }
     }
 }
