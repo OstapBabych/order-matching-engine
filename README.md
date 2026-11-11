@@ -1,26 +1,28 @@
 # Order Matching Engine
 
-A Java implementation of a stock/crypto exchange order-matching engine,
-built as a CV project to demonstrate data structures, concurrency and
-performance benchmarking.
+A limit order book and matching engine written in Java 21. It implements
+price-time priority matching with limit and market (IOC) orders, partial fills,
+multi-level sweeps and order cancellation, and compares two concurrency designs —
+a `synchronized` order book and a single-writer engine — using JMH benchmarks.
 
 ## Roadmap
 
-- [ ] Phase 1 — Core order book (single-threaded)
-  - Order / Side / OrderType model classes
-  - OrderBook with price-time priority
-  - Basic matching logic (limit orders, partial fills)
-- [ ] Phase 2 — Concurrency
-  - Thread-safe order submission
-  - Concurrent order processing
-- [ ] Phase 3 — Benchmarking
-  - Throughput (orders/sec) and latency (p50/p95/p99) measurements
-- [ ] Phase 4 — Tests
-  - JUnit 5 tests for matching edge cases (partial fills, cancellations,
-    crossed book)
-- [ ] Phase 5 — Polish
-  - README with architecture + benchmark results, publish to GitHub
+- [x] Phase 1 — Core order book
+  - `Order` / `Side` / `OrderType` / `Trade` domain model with fail-fast validation
+  - `OrderBook` with price-time priority: limit and market orders, partial fills, multi-level sweeps
+  - Order cancellation with O(1) id lookup, duplicate order id rejection
+- [x] Phase 2 — Concurrency
+  - Thread-safe `synchronized` `OrderBook`
+  - Single-writer `MatchingEngine`: `BlockingQueue`, one matcher thread, `CompletableFuture` results, sealed command types
+  - Graceful shutdown and concurrency tests
+- [x] Phase 3 — Benchmarking
+  - JMH throughput benchmarks: single-threaded, by book depth, multi-threaded
+  - Latency percentiles (p50 / p99 / p99.9)
+- [ ] Phase 4 — Documentation
+  - Architecture, design decisions, complexity and benchmark results
+- [ ] Next — busy-spin wait strategy for the single-writer engine
 
-## Status
+## Documentation
 
-Just started — Phase 1 in progress.
+🚧 **In progress.** Architecture, design decisions and benchmark results are being
+written up. Raw benchmark output is already available in [`bench-results/`](bench-results/).
